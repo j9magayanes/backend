@@ -1,22 +1,24 @@
-const express  =  require("express");
-const mongoose = require('mongoose');
-const booksRoute = require('./routes/books');
-const app = express();
 require("dotenv").config();
+const express  =  require("express");
+const app = express();
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const errorHandler = require("./handlers/error");
+const dataRoutes = require("./routes/data");
+const newsRoutes = require("./routes/news");
+const mongoose = require('mongoose');
 
+app.use(cors());
+app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 
-app.use('/api/books', booksRoute);
+app.use("/api/data", dataRoutes);
+app.use("/api/news", newsRoutes);
 
-mongoose.connect( process.env.MONGO_URL, {
-  keepAlive: true
-}).catch(error => {
-    console.log(error)
-});
 
 app.listen(PORT, () => {
     console.log("Server started at port", PORT);
